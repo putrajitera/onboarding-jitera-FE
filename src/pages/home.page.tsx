@@ -1,8 +1,10 @@
 import { useState } from "react";
 import LoginPage from "../components/login-form/login.form";
 import RegisterPage from "../components/register-form/register.form";
+import { useNavigate } from 'react-router-dom'
 
 function HomePage() {
+  const navigate = useNavigate();
   const [isLog, setIsLog] = useState(false);
 
   const handleChange = () => {
@@ -13,8 +15,8 @@ function HomePage() {
       {isLog ? <LoginPage /> : <RegisterPage />}
       {
         isLog ?
-        <span onClick={() => handleChange()} style={{ fontSize: '0.9rem', textDecoration: 'underline', fontFamily: 'sans-serif'}}>パスワードをお忘れの方</span> :
-        <span onClick={() => handleChange()} style={{ fontSize: '0.9rem', textDecoration: 'underline', fontFamily: 'sans-serif'}}>ログインはこちら</span>
+        <span onClick={() => navigate('/forgot-password')} style={{ fontSize: '0.9rem', textDecoration: 'underline', fontFamily: 'sans-serif', cursor: 'pointer' }}>パスワードをお忘れの方</span> :
+        <span onClick={() => handleChange()} style={{ fontSize: '0.9rem', textDecoration: 'underline', fontFamily: 'sans-serif', cursor: 'pointer' }}>ログインはこちら</span>
       }
     </>
   )

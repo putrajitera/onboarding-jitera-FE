@@ -38,13 +38,13 @@ function LoginForm() {
         return field.trim() === '';
     };
 
-    const isValidPassword = (field: string) => {
-      return field.length < 8;
+    const isValidPassword = (password: string) => {
+      return password.length >= 8 || !isFieldEmpty(password);
     }
 
     const isEmailValid = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+        return emailRegex.test(email) || !isFieldEmpty(email);
     };
 
     const setAllToNull = () => {
@@ -76,9 +76,8 @@ function LoginForm() {
                         onChange={(e) => handleInputChange(e, setEmail)}
                         placeholder='例：welcome@jitera.com'
                     />
-                    {submitted && isFieldEmpty(email) && !isEmailValid(email) && <span style={{ color: '#C40000', textAlign: 'left' }}>Email is required</span>}
-                    {submitted && !isEmailValid(email) && !isFieldEmpty(email) && <span style={{ color: '#C40000', textAlign: 'left' }}>Please enter a valid email</span>}
-
+                    {submitted && !isEmailValid(email) && <span style={{ color: '#C40000', textAlign: 'left' }}>有効なメールアドレスを入力してください</span>}
+                    
                     <label htmlFor="password">パスワード</label>
                     <input
                         type="password"
@@ -88,10 +87,9 @@ function LoginForm() {
                         onChange={(e) => handleInputChange(e, setPassword)}
                         placeholder='半角英数字'
                     />
-                    {submitted && isFieldEmpty(password) && isValidPassword(password) && <span style={{ color: '#C40000', textAlign: 'left' }}>Password is required</span>}
-                    {submitted && !isFieldEmpty(password) && isValidPassword(password) && <span style={{ color: '#C40000', textAlign: 'left' }}>Please enter a password with at least 8 alphanumeric character</span>}
-
-                    <input type="submit" value="はじめる" style={{ marginTop: '6.5rem' }} />
+                    {submitted && !isValidPassword(password) && <span style={{ color: '#C40000', textAlign: 'left' }}>パスワードは英数字8文字以上で入力してください</span>}
+                    
+                    <input type="submit" value="ログイン" style={{ marginTop: '6.5rem', cursor: 'pointer' }} />
                 </form>
             </div>
         </>

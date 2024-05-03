@@ -1,15 +1,14 @@
 import axios from 'axios';
 
 export default async (payload: any) => {
-  console.log('register api triggered');
   try {
-    const { data } = await axios.post(
-      'http://localhost:8080/user/register',
+    const response = await axios.post(
+      'http://localhost:8080/user/request-reset-password',
       {
         ...payload,
       }
     );
-    return data.message;
+    return response.data;
   } catch (error: any) {
     throw error;
   }

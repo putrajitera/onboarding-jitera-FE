@@ -17,6 +17,7 @@ function RegisterForm() {
         e.preventDefault();
         setSubmitted(true);
         if (!isFormValid()) {
+          console.log('failed...');
           return;
         }
         try {
@@ -43,13 +44,13 @@ function RegisterForm() {
         return field.trim() === '';
     };
 
-    const isValidPassword = (field: string) => {
-      return field.length < 8;
-    }
-
+    const isValidPassword = (password: string) => {
+        return password.length >= 8 && !isFieldEmpty(password);
+    };
+    
     const isEmailValid = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+        return emailRegex.test(email) && !isFieldEmpty(email);
     };
 
     const setAllToNull = () => {
@@ -64,10 +65,8 @@ function RegisterForm() {
         return (
             !isFieldEmpty(surname) &&
             !isFieldEmpty(name) &&
-            !isFieldEmpty(email) &&
             isEmailValid(email) &&
-            !isFieldEmpty(password) &&
-            !isValidPassword(password)
+            isValidPassword(password)
         );
     };
 
@@ -87,7 +86,7 @@ function RegisterForm() {
                                 onChange={(e) => handleInputChange(e, setSurname)}
                                 placeholder='例：山田'
                             />
-                            {submitted && isFieldEmpty(surname) && <span style={{ color: '#C40000' }}>Last name is required</span>}
+                            {submitted && isFieldEmpty(surname) && <span style={{ color: '#C40000' }}>姓は必須です</span>}
                         </div>
                         <div style={{ width: '50%', textAlign: 'left' }}>
                             <label htmlFor="name">名</label>
@@ -99,7 +98,7 @@ function RegisterForm() {
                                 onChange={(e) => handleInputChange(e, setName)}
                                 placeholder='例：太郎'
                             />
-                            {submitted && isFieldEmpty(name) && <span style={{ color: '#C40000' }}>First name is required</span>}
+                            {submitted && isFieldEmpty(name) && <span style={{ color: '#C40000' }}>名は必須です</span>}
                         </div>
                     </div>
                     <label htmlFor="email">メールアドレス</label>
@@ -111,8 +110,7 @@ function RegisterForm() {
                         onChange={(e) => handleInputChange(e, setEmail)}
                         placeholder='例：welcome@jitera.com'
                     />
-                    {submitted && isFieldEmpty(email) && !isEmailValid(email) && <span style={{ color: '#C40000', textAlign: 'left' }}>Email is required</span>}
-                    {submitted && !isEmailValid(email) && !isFieldEmpty(email) && <span style={{ color: '#C40000', textAlign: 'left' }}>Please enter a valid email</span>}
+                    {submitted && !isEmailValid(email) && <span style={{ color: '#C40000', textAlign: 'left' }}>有効なメールアドレスを入力してください</span>}
 
                     <label htmlFor="password">パスワード</label>
                     <input
@@ -123,10 +121,9 @@ function RegisterForm() {
                         onChange={(e) => handleInputChange(e, setPassword)}
                         placeholder='半角英数字'
                     />
-                    {submitted && isFieldEmpty(password) && isValidPassword(password) && <span style={{ color: '#C40000', textAlign: 'left' }}>Password is required</span>}
-                    {submitted && !isFieldEmpty(password) && isValidPassword(password) && <span style={{ color: '#C40000', textAlign: 'left' }}>Please enter a password with at least 8 alphanumeric character</span>}
+                    {submitted && !isValidPassword(password) && <span style={{ color: '#C40000', textAlign: 'left' }}>パスワードは英数字8文字以上で入力してください</span>}
 
-                    <input type="submit" value="Begin" style={{ marginTop: '20px' }} />
+                    <input type="submit" value="はじめる" style={{ marginTop: '20px', cursor: 'pointer' }} />
                 </form>
             </div>
         </>
